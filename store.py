@@ -13,24 +13,24 @@ class Store:
     def get_total_quantity(self) -> int:
         total_quantity = 0
         for product in self._products:
-            total_quantity += product._quantity
+            total_quantity += product.get_quantity()
         return total_quantity
 
     def get_all_products(self) -> list[Product]:
         active_products = []
         for product in self._products:
-            if product._active:
+            if product.is_active():
                 active_products.append(product)
         return active_products
 
     def order(self, shopping_list: list[tuple[Product, int]]) -> float:
-        total_price = 0.0
-        for product, quantity in shopping_list:
-            try:
-                total_price += product.buy(quantity)
-            except Exception as e:
-                print(f"Could not buy {product._name}: {e}")
-        return total_price
+      total_price = 0.0
+      for product, quantity in shopping_list:
+        try:
+            total_price += product.buy(quantity)
+        except Exception as e:
+            print(f"Could not buy {product.get_name()}: {e}")
+      return total_price
 
 
 #Best buy

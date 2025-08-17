@@ -5,6 +5,12 @@ class Product:
         self._quantity = quantity
         self._active = quantity > 0
 
+    def __str__(self):
+        return f"{self._name}, Price: ${self._price}, Quantity: {self._quantity}"
+
+    def get_name(self):
+      return self._name
+
     def get_quantity(self) -> int:
         """
         Getter function for quantity.

@@ -10,25 +10,60 @@ product_list = [
 
 best_buy = Store(product_list)
 
+
 def list_products(store):
+    """List all active products."""
     for product in store.get_all_products():
         print(product)
 
+
 def show_total(store):
+    """Show total quantity of all products."""
     print(f"Total quantity: {store.get_total_quantity()}")
 
+
 def make_order(store):
+    """Interactive order process with error handling."""
     products = store.get_all_products()
-    for i, p in enumerate(products):
-        print(f"{i}: {p}")
-    try:
-        index, quantity = map(int, input("Enter index and quantity: ").split())
-        total = store.order([(products[index], quantity)])
+
+    print("------")
+    for i, p in enumerate(products, start=1):  # 1-based index
+        print(f"{i}. {p}")
+    print("------")
+
+    shopping_list = []
+    while True:
+        choice = input("Which product # do you want? (Press Enter to finish) ")
+        if choice.strip() == "":
+            break
+        try:
+            index = int(choice) - 1
+            product = products[index]
+        except (ValueError, IndexError):
+            print("Invalid product number. Try again.")
+            continue
+
+        try:
+            amount = int(input("What amount do you want? "))
+        except ValueError:
+            print("Invalid amount. Try again.")
+            continue
+
+        if amount > product.get_quantity():
+            print("Not enough stock available!")
+        else:
+            shopping_list.append((product, amount))
+            print("Product added to list!")
+
+    if shopping_list:
+        total = store.order(shopping_list)
         print(f"Total price: ${total}")
-    except Exception as e:
-        print(f"Error: {e}")
+    else:
+        print("No products ordered.")
+
 
 def quit_app(_):
+    """Exit the program."""
     print("Goodbye!")
     exit()
 
@@ -42,6 +77,7 @@ menu_selector = {
 
 
 def start(store):
+    """Menu loop."""
     while True:
         print("\nMenu:")
         for key, func in menu_selector.items():
